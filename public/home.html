@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input>
+    <button>Enviar</button>
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+      
+        const socket = io();
+        function $(e) {return document.querySelector(e)}
+        function SendMessage() {
+            const val = $('input').value
+            socket.emit('send_message', val)
+            console.log('teste!')
+        }
+        $('button').addEventListener('click', SendMessage)
+    </script>
+</body>
+</html>
