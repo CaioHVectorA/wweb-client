@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <pre></pre>
     <input>
     <button>Enviar</button>
     <script type="module">
@@ -18,6 +19,11 @@
             socket.emit('send_message', val)
             console.log('teste!')
         }
+        JSON.parse(localStorage.getItem('$GROUPS')).forEach((o) => {
+            console.log(o)
+            $('pre').innerHTML += `<div>${JSON.stringify(o)}</div>`
+        })
+        // $('pre').innerHTML += `<div>${localStorage.getItem('$GROUPS')}</div>`
         $('button').addEventListener('click', SendMessage)
     </script>
 </body>

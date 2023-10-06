@@ -63,7 +63,7 @@
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
       
         const socket = io();
-        console.log(socket.on('QR_ON', () => {window.location.pathname = '/home.html'}))
+        console.log(socket.on('QR_ON', (value) => {localStorage.setItem('$GROUPS', value) ; window.location.pathname = '/home.html'}))
       </script>
 </body>
 </html>

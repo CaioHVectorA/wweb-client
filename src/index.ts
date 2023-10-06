@@ -1,4 +1,4 @@
-import { Client, LocalAuth, AuthStrategy } from 'whatsapp-web.js'
+import { Client, LocalAuth, AuthStrategy, LegacySessionAuth } from 'whatsapp-web.js'
 import express, { Request, Response } from 'express'
 import QRCode from 'qrcode'
 import { Server } from 'socket.io'
@@ -24,7 +24,13 @@ client.on('qr', (qr) => {
 })
 
 client.on('ready', async () => {
-    io.emit('QR_ON')
+    const chats = await client.getChats()
+    io.emit('QR_ON',JSON.stringify(chats.filter(i => i.isGroup === true).map(({ name, id }) => {
+        return {
+            name,
+            id
+        }
+    })))
     // const t = await client.getChats()
     notify('Conectou!')
 });
@@ -35,6 +41,9 @@ client.on('message_create', (m) => {
     // }).filter(i => !!i)
     // )
 })
+
+client.on('authenticated', session => console.log(session))
+
 io.on("connection", (socket) => {
     socket.on('send_message', (value) => {
         console.log('mandou msg!', value)
