@@ -4,24 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <pre></pre>
-    <input>
-    <button>Enviar</button>
+    <div class=" w-screen flex justify-center mt-4">
+        <input class=" bg-gray-100 border border-red-400">
+        <button>Enviar</button>
+    </div>
+    <div class="container-cts flex w-96 mx-auto flex-wrap justify-content flex-col items-center gap-6 mt-4"></div>
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+        const selectArr = []
+        function handle(item) {
+            if (selectArr.includes(item)) {
+                remove(item)
+            } else {
+                add(item)
+            }
+        }
+        function add(item) {
+            selectArr.push(item)
+        }
+        function remove(item) {
+            const index = selectArr.findIndex(i => i === item)
+            selectArr.splice(index,1)
+            console.log(selectArr)
+        }
       
         const socket = io();
         function $(e) {return document.querySelector(e)}
         function SendMessage() {
             const val = $('input').value
-            socket.emit('send_message', val)
+            console.log({groups: selectArr,message: val})
+            socket.emit('send_message', {groups: JSON.stringify(selectArr),message: val})
             console.log('teste!')
         }
-        JSON.parse(localStorage.getItem('$GROUPS')).forEach((o) => {
-            console.log(o)
-            $('pre').innerHTML += `<div>${JSON.stringify(o)}</div>`
+        JSON.parse(localStorage.getItem('$GROUPS')).forEach((o, index) => {
+            const container = document.createElement('div');
+            container.classList.add('flex', 'gap-6');
+
+            const heading = document.createElement('h1');
+            heading.textContent = o.name;
+
+            const inputContainer = document.createElement('div');
+            inputContainer.classList.add('flex');
+
+            const checkbox = document.createElement('input');
+            checkbox.classList.add('dark:border-white-400/20', 'dark:scale-100', 'transition-all', 'duration-500', 'ease-in-out', 'dark:hover:scale-110', 'dark:checked:scale-100', 'w-4', 'h-4');
+            checkbox.type = 'checkbox';
+
+            // Adicione um ouvinte de evento de clique ao checkbox
+            checkbox.addEventListener('click', function() {
+                handle(o.id._serialized); // Passe o parâmetro para a função handle
+            });
+
+            // Adicione os elementos criados ao documento
+            inputContainer.appendChild(checkbox);
+            container.appendChild(heading);
+            container.appendChild(inputContainer);
+            $('.container-cts').appendChild(container);
         })
         // $('pre').innerHTML += `<div>${localStorage.getItem('$GROUPS')}</div>`
         $('button').addEventListener('click', SendMessage)
