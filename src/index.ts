@@ -3,15 +3,20 @@ import express, { Request, Response } from 'express'
 import QRCode from 'qrcode'
 import { Server } from 'socket.io'
 import { createServer } from "http";
+import { join } from 'path';
 import { router } from './router';
 import { notify } from 'node-notifier'
 import { info } from 'veclog';
 const app = express()
-app.use(express.static('public'))
+//app.use(express.static('public'))
 app.use(router)
 const http = createServer(app)
 const client = new Client({
-    authStrategy: new LocalAuth()
+    // authStrategy: new LocalAuth(),
+    puppeteer: {
+        executablePath: "/usr/bin/chromium-browser",
+        args: ["--no-sandbox","--disable-setuid-sandbox"],
+    }
 })
 const io = new Server(http, {   
     cors: {
@@ -84,6 +89,13 @@ app.get('/qr', (req: Request, res: Response) => {
     if (!!!QR) return res.status(404).json({})
     return res.status(200).json({value: QR || null})
 })
-
+// os dois pontos é referente a DIST!!! Se for na pasta root nao funfa
+const path = join(__dirname,'..','public') 
+app.get('/home',(req: Request, res: Response) => {
+    res.sendFile(path+'home.html')
+})
+app.get('/',(req: Request, res: Response) => {
+    res.sendFile(path+'index.html')
+})
 client.initialize();
 http.listen(3000, () => console.log('Server Running 3000 🙏🚀'))
