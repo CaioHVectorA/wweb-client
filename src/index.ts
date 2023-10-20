@@ -89,7 +89,7 @@ app.get('/qr', (req: Request, res: Response) => {
     return res.status(200).json({value: QR || null})
 })
 // os dois pontos é referente a DIST!!! Se for na pasta root nao funfa
-const path = join(__dirname,'..','public') 
+const path = join(__dirname,'..','/public') 
 app.get('/home',(req: Request, res: Response) => {
     res.sendFile(path+'home.html')
 })
