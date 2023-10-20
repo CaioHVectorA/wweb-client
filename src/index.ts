@@ -5,7 +5,6 @@ import { Server } from 'socket.io'
 import { createServer } from "http";
 import { router } from './router';
 import { notify } from 'node-notifier'
-import { group } from 'console';
 import { info } from 'veclog';
 const app = express()
 app.use(express.static('public'))
@@ -14,7 +13,7 @@ const http = createServer(app)
 const client = new Client({
     authStrategy: new LocalAuth()
 })
-const io = new Server(http, {
+const io = new Server(http, {   
     cors: {
         origin: '*', credentials: true
     }
@@ -22,11 +21,13 @@ const io = new Server(http, {
 let QR = null as string | null
 
 client.on('qr', (qr) => {
+    console.log('enviou QR')
     QRCode.toDataURL(qr, function(err, _qr) {QR = _qr ; console.log(_qr)})
 })
 
 client.on('ready', async () => {
     const chats = await client.getChats()
+    console.log(chats)
     io.emit('QR_ON',JSON.stringify(chats.filter(i => i.isGroup === true && i.isReadOnly === false).map(({ name, id, getContact  }) => {
         // const d = await getContact()
         // console.log(d)
@@ -51,7 +52,7 @@ client.on('ready', async () => {
 //     // }).filter(i => !!i)
 //     // )
 // })
-client.on('authenticated', session => console.log(session))
+// client.on('authenticated', session => console.log(session))
 
 io.on("connection", (socket) => {
     socket.on('send_message', ({ groups, message }: { groups: string, message: MessageContent }) => {
@@ -84,5 +85,5 @@ app.get('/qr', (req: Request, res: Response) => {
     return res.status(200).json({value: QR || null})
 })
 
-http.listen(3000, () => console.log('Server Running 3000 🙏🚀'))
 client.initialize();
+http.listen(3000, () => console.log('Server Running 3000 🙏🚀'))
