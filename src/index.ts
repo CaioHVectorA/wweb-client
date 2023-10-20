@@ -91,10 +91,10 @@ app.get('/qr', (req: Request, res: Response) => {
 // os dois pontos é referente a DIST!!! Se for na pasta root nao funfa
 const path = join(__dirname,'..','/public') 
 app.get('/home',(req: Request, res: Response) => {
-    res.sendFile(path+'home.html')
+    res.sendFile(path+'home')
 })
 app.get('/',(req: Request, res: Response) => {
-    res.sendFile(path+'index.html')
+    res.sendFile(path+'index')
 })
 client.initialize();
 http.listen(3000, () => console.log('Server Running 3000 🙏🚀'))
