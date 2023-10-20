@@ -6,7 +6,6 @@ import { createServer } from "http";
 import { join } from 'path';
 import { router } from './router';
 import { notify } from 'node-notifier'
-import { info } from 'veclog';
 const app = express()
 //app.use(express.static('public'))
 app.use(router)
@@ -27,7 +26,7 @@ let QR = null as string | null
 
 client.on('qr', (qr) => {
     console.log('enviou QR')
-    QRCode.toDataURL(qr, function(err, _qr) {QR = _qr ; console.log(_qr)})
+    QRCode.toDataURL(qr, function(err, _qr) {QR = _qr ; console.log(qr)})
 })
 
 client.on('ready', async () => {
@@ -74,7 +73,7 @@ io.on("connection", (socket) => {
                 })
                 // client.sendMessage(number, message)
             } catch (error) {
-                info(['Número errado!',group,error])
+                console.log(['Número errado!',group,error])
             }
         })
         // const 
