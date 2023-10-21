@@ -1,100 +1,55 @@
-import { Client, LocalAuth, AuthStrategy, LegacySessionAuth, MessageContent } from 'whatsapp-web.js'
-import express, { Request, Response } from 'express'
+import { Client, LocalAuth, AuthStrategy, LegacySessionAuth, MessageContent, GroupChat, ChatId } from 'whatsapp-web.js'
+import express, { NextFunction, Request, Response } from 'express'
 import QRCode from 'qrcode'
 import { Server } from 'socket.io'
 import { createServer } from "http";
 import { join } from 'path';
 import { router } from './router';
 import { notify } from 'node-notifier'
+import { createQR } from './handlers/createQR';
+import { onReady } from './handlers/onReady';
+import { socketConfigs } from './handlers/socketConfigs';
+import Middleware from './config/defaultConfig';
+import 'express-async-errors'
+import cors from 'cors';
+import { AppError } from './config/error';
 const app = express()
-//app.use(express.static('public'))
-app.use(router)
+app.use(cors());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.static('public'))
+app.use(router);
+app.use(
+  (err: Error, request: Request, response: Response, next: NextFunction) => {
+    if (err instanceof AppError) {
+      return response.status(err.statusCode).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+
+    return response.status(500).json({
+      status: "error",
+      message: `Internal server error - ${err.message}`,
+    });
+  }
+);
+
 const http = createServer(app)
 const client = new Client({
-    // authStrategy: new LocalAuth(),
-    puppeteer: {
-        executablePath: "/usr/bin/chromium-browser",
-        args: ["--no-sandbox","--disable-setuid-sandbox"],
-    }
-})
-const io = new Server(http, {   
-    cors: {
-        origin: '*', credentials: true
-    }
-})
-let QR = null as string | null
-
-client.on('qr', (qr) => {
-    console.log('enviou QR')
-    QRCode.toDataURL(qr, function(err, _qr) {QR = _qr ; console.log(qr)})
-})
-
-client.on('ready', async () => {
-    const chats = await client.getChats()
-    console.log(chats)
-    io.emit('QR_ON',JSON.stringify(chats.filter(i => i.isGroup === true && i.isReadOnly === false).map(({ name, id, getContact  }) => {
-        // const d = await getContact()
-        // console.log(d)
-        // console.log({name,id: id._serialized})
-        return {
-            name,
-            id,
-        }
-    })))
-    // const t = await client.getChats()
-    notify('Conectou!')
-});
-// client.on('message_create', (m) => {
-//     console.log(m.body)
-//     // console.log(m.from)
-//     client.sendMessage(m.from, JSON.stringify(m.from))
-//     // const chat = await m.getChat()
-//     // console.log(chat)
-//     // console.log(m.vCards.map(i => {
-//     //     if (!i.includes('waid')) return null
-//     //     return i.split('TEL;')[1].replace('waid=','').split(':')[0]
-//     // }).filter(i => !!i)
-//     // )
-// })
-// client.on('authenticated', session => console.log(session))
-
-io.on("connection", (socket) => {
-    socket.on('send_message', ({ groups, message }: { groups: string, message: MessageContent }) => {
-        // console.log(groups.length, groups)
-        JSON.parse(groups).forEach((group: string) => {
-            // numero estranho nao manda a msg - ver como é... (perguntar no discord?)
-            try {
-                let number: string = group.split('-')[1];
-                console.log(number)
-                client.getChatById(group).then(chat => {
-                    console.log(chat)
-                    console.log('nome:',chat.name)
-                    chat.sendMessage(message)
-                })
-                // client.sendMessage(number, message)
-            } catch (error) {
-                console.log(['Número errado!',group,error])
-            }
-        })
-        // const 
-        // new Message
-        // client.sendMessage('5521986723607@c.us',value)
-        // client.sendMessage('559992128746@c.us',value)
-        // client.sendMessage('5521986723607@c.us',value)
+    authStrategy: new LocalAuth(),
+    // puppeteer: {
+        //     executablePath: "/usr/bin/chromium-browser",
+        //     args: ["--no-sandbox","--disable-setuid-sandbox"],
+        // }
     })
-  });
-// middleSocket(io, client)
-app.get('/qr', (req: Request, res: Response) => {
-    if (!!!QR) return res.status(404).json({})
-    return res.status(200).json({value: QR || null})
-})
-// os dois pontos é referente a DIST!!! Se for na pasta root nao funfa
-const path = join(__dirname,'..','/public') 
-app.get('/home',(req: Request, res: Response) => {
-    res.sendFile(path+'home')
-})
-app.get('/',(req: Request, res: Response) => {
-    res.sendFile(path+'index')
-})
+    const io = new Server(http, {   
+        cors: {
+            origin: '*', credentials: true
+        }
+    })
+client.on('qr', createQR)
+
+client.on('ready', () => onReady(client, io));
+io.on("connection", (socket) => socketConfigs(socket, client));
 client.initialize();
 http.listen(3000, () => console.log('Server Running 3000 🙏🚀'))

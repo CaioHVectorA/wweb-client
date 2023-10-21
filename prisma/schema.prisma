@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model qr {
+  base64       String
+  id           Int      @id @unique @default(autoincrement())
+  qrcode       String   @unique
+  created_at   DateTime @default(now())
+  last_updated DateTime @updatedAt
+}
+
+model Groups {
+  created_at DateTime @default(now())
+  id         Int      @id @unique @default(autoincrement())
+  data       String
+}
