@@ -18,6 +18,6 @@ export function socketConfigs(socket: Socket, client: Client) {
                 console.log(['Número errado!',group,error])
             }
         })
+        wweblog(`Mensagens enviadas com sucesso!`)
     })
-    wweblog(`Mensagens enviadas com sucesso!`)
 }

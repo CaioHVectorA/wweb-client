@@ -13,6 +13,8 @@ import Middleware from './config/defaultConfig';
 import 'express-async-errors'
 import cors from 'cors';
 import { AppError } from './config/error';
+import { IO_RECEIVERS } from './util/ioEvents';
+import { wweblog } from './lib/console';
 const app = express()
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -36,7 +38,7 @@ app.use(
 
 const http = createServer(app)
 const client = new Client({
-    authStrategy: new LocalAuth(),
+    // authStrategy: new LocalAuth(),
     // puppeteer: {
         //     executablePath: "/usr/bin/chromium-browser",
         //     args: ["--no-sandbox","--disable-setuid-sandbox"],
@@ -47,9 +49,24 @@ const client = new Client({
             origin: '*', credentials: true
         }
     })
-client.on('qr', createQR)
-
+let isClientOn = false;    
+let isQROn = null as null | string
+client.on('qr', (qr) => {
+  isQROn = qr
+  createQR(qr,io)
+})
 client.on('ready', () => onReady(client, io));
-io.on("connection", (socket) => socketConfigs(socket, client));
-client.initialize();
+io.on("connection", (socket) => {
+  socketConfigs(socket, client)
+  socket.on(IO_RECEIVERS.INIT_CLIENT, () => {
+    if (isClientOn) {
+      onReady(client, io)
+    } else if (isQROn) {
+      createQR(isQROn,io)
+    } else {
+      wweblog('Iniciando Cliente!')
+      client.initialize();
+    }
+  })
+});
 http.listen(3000, () => console.log('Server Running 3000 🙏🚀'))
