@@ -8,7 +8,8 @@ import { thisURL } from "../util/envariables";
 export async function onReady(client: Client, io: Server) {
     wweblog('Cliente pronto! Carregando os grupos...')
     const chats = await client.getChats()
-    const groups = chats.filter(i => i.isGroup === true && i.isReadOnly === false).map(({ name, id, getContact  }) => {
+    console.log(chats.filter(i => i.isGroup))
+    const groups = chats.filter(i => i.isGroup && !i.isReadOnly).map(({ name, id, getContact  }) => {
         // const d = await getContact()
         // console.log(d)
         // console.log({name,id: id._serialized})

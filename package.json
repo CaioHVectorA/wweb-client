@@ -23,7 +23,7 @@
     "socket.io": "^4.7.2",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
-    "whatsapp-web.js": "^1.22.2-alpha.4"
+    "whatsapp-web.js": "^1.23.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.18",
