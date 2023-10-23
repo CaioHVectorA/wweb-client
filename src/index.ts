@@ -39,11 +39,11 @@ app.use(
 
 const http = createServer(app)
 const client = new Client({
-    // authStrategy: new LocalAuth(),
-    // puppeteer: {
-    //         executablePath: "/usr/bin/chromium-browser",
-    //         args: ["--no-sandbox","--disable-setuid-sandbox"],
-    //     }
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+            executablePath: "/usr/bin/chromium-browser",
+            args: ["--no-sandbox","--disable-setuid-sandbox"],
+        }
     })
     const io = new Server(http, {   
         cors: {
