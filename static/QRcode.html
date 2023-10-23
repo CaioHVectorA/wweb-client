@@ -37,7 +37,7 @@
             <img />
             <div class=" absolute bottom-8">     
                 <!-- <p class=" underline cursor-pointer emiter-destroy">Reiniciar o cliente</p> -->
-                <a href="/scream1-home/home.html" class=" underline cursor-pointer">Pular isso</a>
+                <a href="/scream1-home/" class=" underline cursor-pointer">Pular isso</a>
             </div>
         </div>
     </div>
@@ -48,17 +48,16 @@
 * @param {string} e - O seletor CSS para selecionar o elemento.
 * @return {HTMLElement|null} O elemento do DOM selecionado, ou null se nenhum elemento corresponder ao seletor.
 */ 
-        const URL_API = ""
-        fetch(URL_API+'/client').then(response => {
+        fetch('/client').then(response => {
             if (response.ok) response.json().then(data => {
                 console.log(data)
                 if (data) {
-                    window.location.pathname = '/scream1-home/home.html'
+                    window.location.pathname = '/scream1-home/'
                 }
             })
         })
         function $(e) {return document.querySelector(e)}
-        const socket = io(URL_API);
+        const socket = io();
         $('button').addEventListener('click', () => {
             $('.initial').classList.add('hidden')
             $('.loading').classList.remove('hidden')
@@ -69,7 +68,7 @@
             $('.qr').classList.remove('hidden')
             $('img').src = qr
         })
-        socket.on('QR_ON', (value) => {localStorage.setItem('$GROUPS', value) ; window.location.pathname = '/scream1-home/home.html'})
+        socket.on('QR_ON', (value) => {localStorage.setItem('$GROUPS', value) ; window.location.pathname = '/scream1-home/'})
       </script>
 </body>
 </html>1

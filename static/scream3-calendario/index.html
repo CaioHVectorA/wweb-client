@@ -10,21 +10,21 @@
   <body>
     <section>
       <section class="sidebar">
-        <img class="logo-sidebar" src="./img/sidebar/Group 1.png" alt="" />
+        <img class="logo-sidebar" src="https://static-nave.netlify.app/img/Group%201.png" alt="" />
         <ul class="main">
           <li class="center">
-            <a href="../scream1-home/home.html" class="home-icon" id="icons">
-              <img src="./img/sidebar/home icon.png" alt="" width="45px" />
+            <a href="../scream1-home/" class="home-icon" id="icons">
+              <img src="https://static-nave.netlify.app/img/home%20icon.png" alt="" width="45px" />
               <td>Home</td>
             </a>
 
             <a
-              href="../scream2-presenca/index.html"
+              href="../scream2-presenca/"
               class="verificado-icon"
               id="icons"
             >
               <img
-                src="./img/sidebar/verificado icon.png"
+                src="https://static-nave.netlify.app/img/verificado%20icon.png"
                 alt=""
                 width="45px"
               />
@@ -33,7 +33,7 @@
 
             <a href="#" class="calendario-icon" id="icons">
               <img
-                src="./img/sidebar/Ellipse 16.png"
+                src="https://static-nave.netlify.app/img/Ellipse%2015.png"
                 alt=""
                 width="60px"
               />
@@ -42,12 +42,12 @@
           </li>
           <li class="sair">
             <a
-              href="../index.html"
+              href="../"
               class="sair-icon"
               onclick="logar(); return false"
             >
               <img
-                src="./img/sidebar/sair icon.png"
+                src="https://static-nave.netlify.app/img/sair%20icon.png"
                 alt=""
                 max-width="40px"
                 min-width="20px"
@@ -71,6 +71,260 @@
     </div>
       <script src="./js/main.js"></script>
       <style>
+        * {
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+
+}
+
+/*sidebar*/
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+a p {
+    color: aliceblue;
+    font-family: 'Inter', sans-serif;
+    font-weight: 550;
+}
+
+#icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+}
+
+.sidebar {
+    position: absolute;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    background: #221B66;
+    margin: 10px;
+    max-width: 110px;
+    min-width: 90px;
+    height: 97%;
+    border-radius: 35px;
+}
+
+.logo-sidebar {
+    position: relative;
+    margin-top: 20%;
+    margin-left: 6px;
+}
+
+.sair {
+    position: absolute;
+    list-style: none;
+    top: 90%;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin-top: 14vh;
+    display: flex;
+    gap: 9vh;
+    flex-direction: column;
+}
+
+#icons:hover {
+    filter: invert(20%);
+}
+/*area de trablalho*/
+.area-de-trabalho{
+
+    height: 100vh;
+    margin-left: 110px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    gap:10px;
+    grid-template-areas:
+        'dopdown  calendario'
+        'horaios materias';
+}
+/*drop down*/
+.dropdown {
+    margin-top: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    width: 250px;
+    height: 45px;
+    border-radius: 50px;
+    box-shadow: 0px 0px 21px 1px #231b6625;
+    margin-left: 100px;
+    grid-area: dopdown;
+
+}
+
+.turma {
+    color: #78787A;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: normal;
+    padding: 10px;
+    margin-right: 10px;
+    
+}
+
+#salas {
+    border-radius: 50px;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: normal;
+    color: #4032C5;
+}
+/*calendario*/
+.calendario{
+    width: 772px;
+    height: 446px;
+    border-radius: 30px;
+    padding: 20px;
+    position: relative;
+    top: 30px; 
+    box-shadow: 0px 0px 21px 1px #231b6625;
+    display: grid;
+    font-size: x-large;
+    grid-area: calendario;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto;
+}
+.calendario div,.dia-semana{
+    color: #221B66;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dia-semana{
+    color: #a70ae5;
+}
+.horarios{
+    overflow:visible;
+    width: 490px;
+    height: 719px;
+    margin-left: 70px;
+    border-radius: 30px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: -200px;
+    box-shadow: 0px 0px 21px 1px #231b6625;
+    grid-area: horaios;
+}
+.quatro{
+    /* background-image: url(.https://static-nave.netlify.app/img/Ellipse\ 15.png); */
+    background-repeat: no-repeat;;
+    background-position: center;
+    filter: invert(10%);
+}
+/* materias */
+.materias{
+    width: 650px;
+    height: 400px;
+    grid-area: materias;
+    padding: 20px;
+    border-radius: 30px;
+    margin-top: 100px;
+    box-shadow: 0px 0px 21px 1px #231b6625;
+    margin-left: 50px;
+    display: grid;
+    grid-template-areas: 
+    "header header header"
+    "horario horario img"
+    "materia materia img"
+    "classroom content img";
+}
+header{
+    background: #ffffff;
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: xx-large;
+    margin-bottom: 20px;
+}
+.horario{
+
+    grid-area: horario;
+    width: 300px;
+    margin-left: 20px;
+    margin-top: 3px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 20px;
+    border-left:4px solid black;
+    border-radius: 5px;
+
+}
+.materia{
+
+    grid-area: materia;
+    width: 300px;
+    margin-left: 20px;
+    margin-top: 3px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 20px;
+    border-left:4px solid black;
+    border-radius: 5px;
+
+}
+.classroom{
+
+    grid-area: classroom;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    width: 300px;
+    text-decoration: underline 1px;
+}
+.professor{
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 20px;
+    grid-area: img;
+    height: 300px;
+    position: relative;
+    right: 40px;
+    display: flex;
+    top: -20px;
+    justify-content: center;
+
+}
+.professor img{
+    background: #2f0e2a;
+    border-radius: 20px;
+}
+.professor h4{
+    
+    border-radius: 20px;
+}
     .coiso{
     height: 100vh;
     display: flex;

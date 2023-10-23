@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="./css/styles1.css">
     <link rel="icon" href="./img/Logo.png">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <link rel="stylesheet" href="./scream1-home/home.html">
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <title>log in</title>
 </head>
@@ -14,7 +13,7 @@
     <section class="login-fundo">
         <div class="all-login">
             <ul id="all-login">
-                <li><img  id="img-login"src="./img/Group 1.png" alt=""><span class="img-login">NAVE</span></li>
+                <li><img  id="img-login"src="https://static-nave.netlify.app/img/Group%201.png" alt=""><span class="img-login">NAVE</span></li>
                 <li class="login-signin">
                     <p onclick="setRegister()" style="color: white;" class="button-login register selecionado">Registrar</p>
                     <p onclick="setLogin()" style="color: white;" class="button-login login" href="#">Entrar</p>
@@ -35,6 +34,92 @@
             border-bottom: 2px solid whitesmoke;
             padding-bottom: 3px;
         }
+        *{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("https://live.staticflickr.com/65535/53278966897_3431811fec.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+ul{
+    list-style: none;
+}
+img{
+    padding-bottom: 25px;
+    margin-left: -6px;
+}
+
+.login-fundo{
+    /* margin-top: 20%; */
+    background: #171717a9;
+    max-width: 600px;
+    max-height: 600px;
+    min-width: 400px;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin: auto 0;
+}
+.img-login{
+    color:aliceblue;
+    position: absolute;
+    margin-top: 8px;
+    font-size: 50px;
+    font-family: 'Noto Sans', sans-serif;
+}
+#img-login{
+    color:aliceblue;
+    margin-left: 40px;
+    font-size: 50px;
+    font-family: 'Noto Sans', sans-serif; 
+}
+.login-signin{
+    display: flex;
+    flex-direction: row;
+    gap:70px;
+    margin-left: 60px;
+    margin-bottom:30px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 550;
+}
+
+.login-signin a{
+    color:white;
+    text-decoration: none;
+}
+.sign{
+    color: red;
+}
+.login-input{
+    width: 280px;
+    height: 50px;
+    border-radius: 14px;
+    margin-bottom: 15px;
+    padding-left: 20px;
+}
+.login-button{
+    padding-left: 60px;
+    padding-right: 60px;
+    border-radius: 14px;
+    width: 310px;
+    height: 50px;
+    background-color: blueviolet;
+    border: 0px solid;
+    color:aliceblue;
+    position: relative;
+    top: 60px;
+    font-size: medium;
+    font-weight: 550;
+}
+
     </style>
     <script>
                         /**
@@ -55,7 +140,7 @@
                 console.log(response)
                 if (response.status < 299) {
                         localStorage.setItem('$SESSION',JSON.stringify({name,can_use_zap}))
-                        window.location.pathname = can_use_zap ? 'QRCode.html' : './scream1-home/home.html'
+                        window.location.pathname = can_use_zap ? 'QRCode' : './scream1-home/'
                 } else {
                     response.json().then(data => alert(data.message))
                 }
