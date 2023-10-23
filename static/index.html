@@ -10,6 +10,9 @@
     <title>log in</title>
 </head>
 <body style="height: 100vh;">
+    <div style="width: 100vw; height: 100vh; background-color: #fff; position: absolute; z-index: 20;" class="hidden">
+        <a class="link" href="" style="font-size: 64px;">Clique para recirecionar</a>
+    </div>
     <section class="login-fundo">
         <div class="all-login">
             <ul id="all-login">
@@ -27,6 +30,7 @@
         </div>
     </section>
     <style>
+        .hidden {display: none;}
         .button-login {
             cursor: pointer;
         }
@@ -140,7 +144,10 @@ img{
                 console.log(response)
                 if (response.status < 299) {
                         localStorage.setItem('$SESSION',JSON.stringify({name,can_use_zap}))
-                        window.location.pathname = can_use_zap ? 'QRCode' : './scream1-home/'
+                        $('.hidden').classList.remove('hidden')
+                        $('.link').href = can_use_zap ? 'QRCode' : '../scream1-home/'
+                        // window.location.pathname = can_use_zap ? 'QRCode' : '../scream1-home/'
+
                 } else {
                     response.json().then(data => alert(data.message))
                 }

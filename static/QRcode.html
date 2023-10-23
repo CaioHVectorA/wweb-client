@@ -12,6 +12,9 @@
     <title>Document</title>
 </head>
 <body>
+    <div style="width: 100vw; height: 100vh; background-color: #fff; position: absolute; z-index: 20;" class="hidden">
+        <a class="link" href="" style="font-size: 64px;">Clique para recirecionar</a>
+    </div>
     <div class="initial">
         <div class=" flex flex-col bg-gradient-to-tr items-center justify-center from-orange-600 to-amber-200 font-poppins h-screen text-white">
             <button class="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Inicializar o cliente</button>
@@ -43,15 +46,17 @@
     </div>
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-        /**
+                        /**
 * Seleciona um elemento do DOM com base no seletor CSS.
 * @param {string} e - O seletor CSS para selecionar o elemento.
 * @return {HTMLElement|null} O elemento do DOM selecionado, ou null se nenhum elemento corresponder ao seletor.
-*/ 
+*/
+function $(e) { return document.querySelector(e) }
         fetch('/client').then(response => {
             if (response.ok) response.json().then(data => {
                 console.log(data)
                 if (data) {
+                    
                     window.location.pathname = '/scream1-home/'
                 }
             })
@@ -68,7 +73,12 @@
             $('.qr').classList.remove('hidden')
             $('img').src = qr
         })
-        socket.on('QR_ON', (value) => {localStorage.setItem('$GROUPS', value) ; window.location.pathname = '/scream1-home/'})
+        socket.on('QR_ON', (value) => {
+            localStorage.setItem('$GROUPS', value) ;
+            //  window.location.pathname = '/scream1-home/'
+            $('.hidden').classList.remove('hidden')
+            $('link').href = '/scream1-home/'
+        })
       </script>
 </body>
 </html>1
