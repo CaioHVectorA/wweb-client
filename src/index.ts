@@ -18,7 +18,7 @@ import { wweblog } from './lib/console';
 const app = express()
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static('public'))
+app.use(express.static('static'))
 app.use(router);
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {
@@ -38,24 +38,26 @@ app.use(
 
 const http = createServer(app)
 const client = new Client({
-    authStrategy: new LocalAuth(),
-    // puppeteer: {
-        //     executablePath: "/usr/bin/chromium-browser",
-        //     args: ["--no-sandbox","--disable-setuid-sandbox"],
-        // }
+    //authStrategy: new LocalAuth(),
+    puppeteer: {
+            executablePath: "/usr/bin/chromium-browser",
+            args: ["--no-sandbox","--disable-setuid-sandbox"],
+        }
     })
     const io = new Server(http, {   
         cors: {
             origin: '*', credentials: true
         }
     })
-let isClientOn = false;    
+let isClientOn = false;  
+app.get('/client', (req,res) => res.json(isClientOn))  
 let isQROn = null as null | string
 client.on('qr', (qr) => {
   isQROn = qr
   createQR(qr,io)
 })
-client.on('ready', () => onReady(client, io));
+client.on('disconnected', () => isClientOn = true)
+client.on('ready', () => {isClientOn = true; onReady(client, io)});
 io.on("connection", (socket) => {
   socketConfigs(socket, client)
   socket.on(IO_RECEIVERS.INIT_CLIENT, () => {

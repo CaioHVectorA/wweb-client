@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="icon" href="./img/Logo.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>home</title>
+  </head>
+  <body>
+    <section class="sidebar">
+      <img class="logo-sidebar" src="./img/sidebar/Group 1.png" alt="" />
+      <ul class="main">
+        <li class="center">
+          <a href="#" class="home-icon" id="icons">
+            <img src="./img/sidebar/Group 129.png" alt="" width="45px" />
+            <p>Home</p>
+          </a>
+
+          <a href="../scream2-presenca/index.html" class="verificado-icon" id="icons">
+            <img src="./img/sidebar/verificado icon.png" alt="" width="45px" />
+            <p>Presença</p>
+          </a>
+
+          <a href="../scream3-calendario/index.html" class="calendario-icon" id="icons">
+            <img src="./img/sidebar/calendario icon.png" alt="" width="45px" />
+            <p>Agenda</p>
+          </a>
+        </li>
+        <li class="sair">
+          <a
+            href="../index.html"
+            class="sair-icon"
+            onclick="logar(); return false"
+          >
+            <img
+              src="./img/sidebar/sair icon.png"
+              alt=""
+              max-width="40px"
+              min-width="20px"
+            />
+          </a>
+        </li>
+      </ul>
+    </section>
+    <div class=" flex flex-col justify-center mt-4 pt-4 items-center w-10/12 mx-auto pl-24">
+      <textarea class=" bg-gray-100 border h-24 p-1 border-red-400 w-full"></textarea>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Enviar</button>
+  </div>
+  <!-- <div class="container-cts flex w-full px-6 mx-auto flex-wrap justify-content items-center gap-6 mt-4"></div> -->
+  <div class="w-10/12 mx-auto my-4 flex flex-col gap-4 items-center">
+      <hr class="w-full">
+      <div class="flex gap-4 items-center">
+          <p class="text-3xl">É Aviso?</p>
+          <input id="isAviso" type="checkbox" class="dark:border-white-400/20', 'dark:scale-100', 'transition-all', 'duration-500', 'ease-in-out', 'dark:hover:scale-110', 'dark:checked:scale-100', 'w-4', 'h-4">
+      </div>
+      <form id="aviso-form" class="hidden">
+          <label for="tipoAviso">Imagem:</label>
+          <select id="tipoAviso" name="tipoAviso" class="border-black border">
+              <option value="https://oifuturo.org.br/wp-content/uploads/2018/05/logo_NAVE_verde.png">Logo do Nave</option>
+          </select>
+          <br><br>
+  
+          <label for="autor">Autor:</label>
+          <input type="text" id="autor" name="autor" class="border-black border">
+          <br><br>
+  
+          <label for="tituloAviso">Título do Aviso:</label>
+          <input type="text" id="tituloAviso" name="tituloAviso" class="border-black border">
+          <br><br>
+          <label>
+              <input checked type="radio" name="filtro" value="personalizado"> Filtro personalizado
+          </label>
+          <label>
+              <input type="radio" name="filtro" value="turma"> Filtro de turma
+          </label>
+          <br><br>
+          <select class="select filtros-comuns">
+              <option value="">Todos</option>
+              <option value="SERIE_1">1° Série</option>
+              <option value="SERIE_2">2° Série</option>
+              <option value="SERIE_3">3° Série</option>
+              <option value="MULTIMIDIA">Multimídia</option>
+              <option value="PROGRAMACAO">Programação</option>
+          </select>
+          <select class="select turmas hidden">
+              <option value="1001">1001</option>
+              <option value="1002">1002</option>
+              <option value="1003">1003</option>
+              <option value="1004">1004</option>
+              <option value="2001">2001</option>
+              <option value="2002">2002</option>
+              <option value="2003">2003</option>
+              <option value="2004">2004</option>
+              <option value="3001">3001</option>
+              <option value="3002">3002</option>
+              <option value="3003">3003</option>
+              <option value="3004">3004</option>
+          </select>
+          </form>
+      <hr class="w-full">
+  </div>
+  <div class="grid gap-4 mt-6 grid-cols-3 justify-center items-center w-10/12 mx-auto container-cts max-lg:grid-cols-2 max-md:grid-cols-1"></div>
+  <script type="module">
+      import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+      const API_URL = 'https://4sqwxk-9128.csb.app/'
+      if (!localStorage.getItem('$SESSION')) window.location.pathname = '/'
+      // const API_URL = 'http://localhost:9128/'
+      const selectArr = []
+      function handle(item) {
+          if (selectArr.includes(item)) {
+              remove(item)
+          } else {
+              add(item)
+          }
+      }
+      function add(item) {
+          selectArr.push(item)
+      }
+      function remove(item) {
+          const index = selectArr.findIndex(i => i === item)
+          selectArr.splice(index,1)
+          console.log(selectArr)
+      }
+      
+      const socket = io();
+              /**
+* Seleciona um elemento do DOM com base no seletor CSS.
+* @param {string} e - O seletor CSS para selecionar o elemento.
+* @return {HTMLElement|null} O elemento do DOM selecionado, ou null se nenhum elemento corresponder ao seletor.
+*/
+      function $(e) {return document.querySelector(e)}
+      if (!JSON.parse(localStorage.getItem('$SESSION')).can_use_zap) $('.container-cts').style.display = 'none'
+      $('#isAviso').addEventListener('change', (e) => {
+          console.log($('.select:not(.hidden)').value)
+          if ($('#isAviso').checked) $('#aviso-form').classList.remove('hidden')
+          if (!$('#isAviso').checked) $('#aviso-form').classList.add('hidden')
+      })
+      $('input[value="personalizado"]').addEventListener('change', (e) => {
+          if ($('input[value="personalizado"]').checked) {
+              $('.filtros-comuns').classList.remove('hidden')
+              $('.turmas').classList.add('hidden')
+          }
+      })
+      $('input[value="turma"]').addEventListener('change', (e) => {
+          if ($('input[value="turma"]').checked) {
+              $('.filtros-comuns').classList.add('hidden')
+              $('.turmas').classList.remove('hidden')
+          }
+      })
+      document.getElementById("autor").value = JSON.parse(localStorage.getItem('$SESSION')).name 
+      function SendMessage() {
+          const val = $('textarea').value
+          console.log({groups: selectArr,message: val})
+          if (selectArr.length > 0) socket.emit('send_message', {groups: JSON.stringify(selectArr),message: val})
+          console.log('teste!')
+          if ($('#isAviso').checked) {
+          // Obter os valores dos campos
+          const tipoAviso = document.getElementById("tipoAviso").value;
+          const autor = document.getElementById("autor").value;
+          const tituloAviso = document.getElementById("tituloAviso").value;
+          const corpoAviso = val;
+
+          // Construir o objeto de dados para a requisição
+          const dadosDoAviso = {
+              author: autor,
+              title: tituloAviso,
+              body: corpoAviso,
+              img: tipoAviso,
+              category: $('.select:not(.hidden)').value
+          };
+
+          // Realizar a requisição POST
+          fetch(API_URL+"aviso/", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify(dadosDoAviso)
+          })
+          .then(response => {response.json()})
+          .then(data => {
+              console.log("Aviso enviado com sucesso:", data);
+              // Faça algo com a resposta, se necessário
+          })
+          .catch(error => {
+              console.error("Erro ao enviar o aviso:", error);
+          });
+          }
+      }
+      JSON.parse(localStorage.getItem('$GROUPS')).forEach((o, index) => {
+          const container = document.createElement('div');
+          container.classList.add('flex', 'gap-6', 'justify-end', 'bg-zinc-900', 'text-white','p-2','rounded-md','items-center');
+
+          const heading = document.createElement('h1');
+          heading.textContent = o.name;
+
+          const inputContainer = document.createElement('div');
+          inputContainer.classList.add('flex');
+
+          const checkbox = document.createElement('input');
+          checkbox.classList.add('dark:border-white-400/20', 'dark:scale-100', 'transition-all', 'duration-500', 'ease-in-out', 'dark:hover:scale-110', 'dark:checked:scale-100', 'w-4', 'h-4');
+          checkbox.type = 'checkbox';
+
+          // Adicione um ouvinte de evento de clique ao checkbox
+          checkbox.addEventListener('click', function() {
+              handle(o.id._serialized); // Passe o parâmetro para a função handle
+          });
+
+          // Adicione os elementos criados ao documento
+          inputContainer.appendChild(checkbox);
+          container.appendChild(heading);
+          container.appendChild(inputContainer);
+          $('.container-cts').appendChild(container);
+      })
+      // $('pre').innerHTML += `<div>${localStorage.getItem('$GROUPS')}</div>`
+      $('button').addEventListener('click', SendMessage)
+  </script>
+</body>
+</html>

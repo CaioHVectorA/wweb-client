@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" href="./img/Logo.png">
+    <title>log in</title>
+</head>
+<body>
+    <section class="login-fundo">
+        <div class="all-login">
+            <ul id="all-login">
+                <li><img  id="img-login"src="./img/Group 1.png" alt=""><span class="img-login">NAVE</span></li>
+                <li class="login-signin">
+                    <a href="">sign in</a>
+                    <a href="">log in</a>
+                </li>
+                <form onsubmit="logar(); return false">
+                    <li ><input placeholder="Email" class="login-input" id="login"type="text"></li>
+                    <li ><input placeholder="Password" class="login-input" id="senha"type="password"></li>
+                    <li ><input type="submit" class="login-button" ></li>
+                </form>
+            </ul>
+        </div>
+    </section>
+    <script>
+        function logar(){
+            var login = document.getElementById('login').value;
+            var senha = document.getElementById('senha').value;
+            let listLogin = ['michele','gabriel','janv','igor','nathan','luana'];
+            let listSenha = ['michele','gabriel','vascooo','igor','nathan','luana'];
+            for(var i = 0; i < 5; i++){
+                if(login == listLogin[i] && senha == listSenha[i]){
+                    alert('sucesso');
+                    location.href = "../scream1-home/home.html";
+                    break
+                }else if(i >= 5){
+                    alert('sexooooooooooo')
+                }
+
+                if(i >= 5){
+                    alert('Usuario ou senha incorretos ');
+                    console.log(listLogin);
+                    console.log(listSenha);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

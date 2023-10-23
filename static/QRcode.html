@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="./styles/output.css"> -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Document</title>
@@ -19,7 +19,7 @@
     </div>
     <div class="loading hidden">
         <div class=" flex flex-col gap-4 bg-gradient-to-tr items-center justify-center from-orange-600 to-amber-200 font-poppins h-screen text-white">
-            <h1 class=" text-3xl">Loading</h1>
+            <h1 class=" text-3xl">Carregando...</h1>
             <div class=" scale-150" aria-label="Loading..." role="status">
             <svg class="animate-spin w-6 h-6 fill-slate-800" viewBox="3 3 18 18">
                 <path class="opacity-20" d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z">
@@ -35,6 +35,10 @@
             <h1 class=" text-3xl">Scanneie o QR Code!</h1>
             <!-- <div id="qrcode" class=" text-3xl"></div> -->
             <img />
+            <div class=" absolute bottom-8">     
+                <!-- <p class=" underline cursor-pointer emiter-destroy">Reiniciar o cliente</p> -->
+                <a href="/scream1-home/home.html" class=" underline cursor-pointer">Pular isso</a>
+            </div>
         </div>
     </div>
     <script type="module">
@@ -43,9 +47,18 @@
 * Seleciona um elemento do DOM com base no seletor CSS.
 * @param {string} e - O seletor CSS para selecionar o elemento.
 * @return {HTMLElement|null} O elemento do DOM selecionado, ou null se nenhum elemento corresponder ao seletor.
-*/
+*/ 
+        const URL_API = ""
+        fetch(URL_API+'/client').then(response => {
+            if (response.ok) response.json().then(data => {
+                console.log(data)
+                if (data) {
+                    window.location.pathname = '/scream1-home/home.html'
+                }
+            })
+        })
         function $(e) {return document.querySelector(e)}
-        const socket = io();
+        const socket = io(URL_API);
         $('button').addEventListener('click', () => {
             $('.initial').classList.add('hidden')
             $('.loading').classList.remove('hidden')
@@ -56,7 +69,7 @@
             $('.qr').classList.remove('hidden')
             $('img').src = qr
         })
-        socket.on('QR_ON', (value) => {localStorage.setItem('$GROUPS', value) ; window.location.pathname = '/home'})
+        socket.on('QR_ON', (value) => {localStorage.setItem('$GROUPS', value) ; window.location.pathname = '/scream1-home/home.html'})
       </script>
 </body>
-</html>
+</html>1

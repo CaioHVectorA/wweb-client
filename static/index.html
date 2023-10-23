@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles1.css">
+    <link rel="icon" href="./img/Logo.png">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="./scream1-home/home.html">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <title>log in</title>
+</head>
+<body style="height: 100vh;">
+    <section class="login-fundo">
+        <div class="all-login">
+            <ul id="all-login">
+                <li><img  id="img-login"src="./img/Group 1.png" alt=""><span class="img-login">NAVE</span></li>
+                <li class="login-signin">
+                    <p onclick="setRegister()" style="color: white;" class="button-login register selecionado">Registrar</p>
+                    <p onclick="setLogin()" style="color: white;" class="button-login login" href="#">Entrar</p>
+                </li>
+                    <li ><input placeholder="Email" class="login-input" id="login"type="text"></li>
+                    <li ><input placeholder="Password" class="login-input" id="senha"type="password"></li>
+                    <label for="check" style="color: white; font-family: sans-serif;">É direção?</label>
+                    <input id="check" type="checkbox" class="can-zap">
+                    <li style="padding-bottom: 40px;"><button onclick="logar()" class="login-button" style="cursor: pointer;">Entrar</button></li>
+            </ul>
+        </div>
+    </section>
+    <style>
+        .button-login {
+            cursor: pointer;
+        }
+        .selecionado {
+            border-bottom: 2px solid whitesmoke;
+            padding-bottom: 3px;
+        }
+    </style>
+    <script>
+                        /**
+* Seleciona um elemento do DOM com base no seletor CSS.
+* @param {string} e - O seletor CSS para selecionar o elemento.
+* @return {HTMLElement|null} O elemento do DOM selecionado, ou null se nenhum elemento corresponder ao seletor.
+*/
+        function $(e) { return document.querySelector(e) }
+        let mode = 'register'
+        function setRegister() { mode = 'register'; $('.register').classList.add('selecionado') ; $('.login').classList.remove('selecionado')  }
+        function setLogin() { mode = 'login'; $('.login').classList.add('selecionado') ; $('.register').classList.remove('selecionado')   }
+        function logar() {
+            // event.preventDefault()
+            const can_use_zap = $('#check').checked
+            const name = $('input[type=text]').value
+            const password = $('input[type=password]').value
+            fetch('https://4sqwxk-9128.csb.app/admin'+ (mode === 'register' ? '/' : '/login'),{body: JSON.stringify({name,password,can_use_zap}), method: 'POST',headers: {"Content-type": "application/json"}}).then(response => {
+                console.log(response)
+                if (response.status < 299) {
+                        localStorage.setItem('$SESSION',JSON.stringify({name,can_use_zap}))
+                        window.location.pathname = can_use_zap ? 'QRCode.html' : './scream1-home/home.html'
+                } else {
+                    response.json().then(data => alert(data.message))
+                }
+            }).catch(err => console.log('err:',err))
+        }
+    </script>
+</body>
+</html>
